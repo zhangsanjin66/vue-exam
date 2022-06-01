@@ -79,6 +79,13 @@
           </el-descriptions-item>
         </el-descriptions>
       </div>
+      <div class="quill-wrap">
+        <quill-editor
+          ref="myQuillEditor"
+          v-model="content"
+          :options="editorOption"
+        />
+      </div>
     </div>
     <div class="aside">
       <div class="item">
@@ -143,9 +150,15 @@
 
 <script>
 import { queryTaskDetailApi } from "@/api/api";
+import "quill/dist/quill.snow.css";
+import { quillEditor } from "vue-quill-editor";
 export default {
+  components: {
+    quillEditor,
+  },
   data() {
     return {
+      content: "",
       form: {
         desc: "",
         levelName: "",
@@ -198,6 +211,12 @@ export default {
         font-size: 12px;
         color: #868f9d;
       }
+    }
+    & .ql-container {
+      min-height: 300px;
+    }
+    & .quill-editor {
+      width: 1120px;
     }
   }
   & .aside {

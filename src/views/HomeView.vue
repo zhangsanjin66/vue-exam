@@ -21,7 +21,7 @@
       <el-container>
         <el-aside>
           <el-menu
-            default-active="2"
+            default-active="1"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
@@ -29,23 +29,30 @@
             text-color="#fff"
             active-text-color="#ffd04b"
           >
-            <el-submenu index="1">
+            <el-submenu
+              :index="index"
+              v-for="(item, index) in form"
+              :key="index"
+            >
               <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>题库管理</span>
+                <div @click="navigator(item.path)">
+                  <i class="el-icon-location"></i>
+                  <span>{{ item.lable }}</span>
+                </div>
               </template>
-              <el-menu-item-group>
-                <el-menu-item index="1-1" @click="navigator('manage')"
-                  >题库管理</el-menu-item
+              <el-menu-item-group
+                v-for="(child, index) in item.chilidren"
+                :key="index"
+              >
+                <el-menu-item
+                  :index="child.id"
+                  @click="navigator(child.path)"
+                  >{{ child.lable }}</el-menu-item
                 >
-                <el-menu-item index="1-2">html题库</el-menu-item>
-                <el-menu-item index="1-3" @click="navigator('about')"
-                  >js题库</el-menu-item
-                >
-                <el-menu-item index="1-4">css题库</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="2" @click="navigator('login')">
+
+            <!-- <el-menu-item index="2" @click="navigator('login')">
               <i class="el-icon-menu"></i>
               <span slot="title">匹配比赛</span>
             </el-menu-item>
@@ -53,7 +60,7 @@
               <i class="el-icon-document"></i>
               <span slot="title">报名系统</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="navigator('about')">
+            <el-menu-item index="4">
               <i class="el-icon-setting"></i>
               <span slot="title">题库类型</span>
             </el-menu-item>
@@ -80,8 +87,8 @@
                 <el-menu-item index="1-11" @click="navigator('management')"
                   >权限管理</el-menu-item
                 >
-              </el-menu-item-group>
-            </el-submenu>
+              </el-menu-item-group> -->
+            <!-- </el-submenu> -->
           </el-menu>
         </el-aside>
         <el-main>
@@ -101,6 +108,77 @@ export default {
     return {
       username: "",
       phone: "",
+      form: [
+        {
+          id: "1",
+          lable: "题库管理",
+          chilidren: [
+            {
+              id: "11",
+              lable: "题库管理",
+              path: "manage",
+            },
+            {
+              id: "12",
+              lable: "html题库",
+            },
+            {
+              id: "13",
+              lable: "js题库",
+              path: "about",
+            },
+            {
+              id: "14",
+              lable: "css题库",
+            },
+          ],
+        },
+        {
+          id: "2",
+          lable: "登录账号",
+          path: "login",
+        },
+        {
+          id: "3",
+          lable: "注册账号",
+          path: "register",
+        },
+        {
+          id: "4",
+          lable: "题库类型",
+        },
+        {
+          id: "5",
+          lable: "个人信息",
+          chilidren: [
+            {
+              id: "51",
+              lable: "账号绑定",
+              path: "personinfo",
+            },
+            {
+              id: "52",
+              lable: "我的任务",
+              path: "chat",
+            },
+            {
+              id: "53",
+              lable: "任务列表",
+              path: "jurisdiction",
+            },
+            {
+              id: "54",
+              lable: "用户列表",
+              path: "userlist",
+            },
+            {
+              id: "55",
+              lable: "权限管理",
+              path: "management",
+            },
+          ],
+        },
+      ],
     };
   },
   methods: {
