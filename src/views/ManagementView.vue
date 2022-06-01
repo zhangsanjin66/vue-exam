@@ -231,6 +231,7 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      console.log(1);
     },
     async getMenuList() {
       let [roleData, groupData] = await Promise.all([
