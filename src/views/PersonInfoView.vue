@@ -142,7 +142,7 @@ export default {
   },
   async created() {
     let res = await getUserInfoApi();
-    this.form = res.data.data[0];
+    this.form = res.data.data;
     // this.province(res.data.data[0].provinceNo, res.data.data[0].cityNo);
     // this.city(res.data.data[0].cityNo);
   },

@@ -8,6 +8,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
+    redirect: 'chat',
     component: HomeView,
     children:[  {
       path: '/about',

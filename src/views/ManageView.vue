@@ -196,10 +196,8 @@
 
       <el-footer class="footer">
         <el-pagination
-          background="white"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
           :page-sizes="[15, 30, 45, 60]"
           :page-size="15"
           layout="total, sizes, prev, pager, next, jumper"

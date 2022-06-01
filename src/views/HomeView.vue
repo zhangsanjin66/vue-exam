@@ -21,28 +21,32 @@
       <el-container>
         <el-aside>
           <el-menu
-            default-active="1"
+            :default-active="defaultActive"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
             background-color="#0c1c35"
             text-color="#fff"
             active-text-color="#ffd04b"
+            v-for="item in menu"
+            :key="item.id"
           >
-            <el-submenu
-              :index="index"
-              v-for="(item, index) in form"
-              :key="index"
-            >
+            <el-menu-item v-if="!item.children" @click="navigator(item.path)">
+              <div>
+                <i :class="item.meta.icon"></i>
+                <span>{{ item.lable }}</span>
+              </div>
+            </el-menu-item>
+            <el-submenu :index="item.id" v-else>
               <template slot="title">
-                <div @click="navigator(item.path)">
-                  <i class="el-icon-location"></i>
+                <div>
+                  <i :class="item.meta.icon"></i>
                   <span>{{ item.lable }}</span>
                 </div>
               </template>
               <el-menu-item-group
-                v-for="(child, index) in item.chilidren"
-                :key="index"
+                v-for="child in item.children"
+                :key="child.id"
               >
                 <el-menu-item
                   :index="child.id"
@@ -51,44 +55,6 @@
                 >
               </el-menu-item-group>
             </el-submenu>
-
-            <!-- <el-menu-item index="2" @click="navigator('login')">
-              <i class="el-icon-menu"></i>
-              <span slot="title">匹配比赛</span>
-            </el-menu-item>
-            <el-menu-item index="3" @click="navigator('register')">
-              <i class="el-icon-document"></i>
-              <span slot="title">报名系统</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">题库类型</span>
-            </el-menu-item>
-            <el-submenu index="5">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>个人信息</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="1-5">修改头像</el-menu-item>
-                <el-menu-item index="1-6">修改密码</el-menu-item>
-                <el-menu-item index="1-7" @click="navigator('personinfo')"
-                  >账号绑定</el-menu-item
-                >
-                <el-menu-item index="1-8" @click="navigator('chat')"
-                  >我的任务</el-menu-item
-                >
-                <el-menu-item index="1-9" @click="navigator('jurisdiction')"
-                  >任务列表</el-menu-item
-                >
-                <el-menu-item index="1-10" @click="navigator('userlist')"
-                  >用户列表</el-menu-item
-                >
-                <el-menu-item index="1-11" @click="navigator('management')"
-                  >权限管理</el-menu-item
-                >
-              </el-menu-item-group> -->
-            <!-- </el-submenu> -->
           </el-menu>
         </el-aside>
         <el-main>
@@ -103,83 +69,26 @@
  
 <script>
 import { getUserLogoutApi, getUserInfoApi } from "@/api/api.js";
+import menu from "@/config/menu.config";
 export default {
   data() {
     return {
+      defaultActive: "",
       username: "",
       phone: "",
-      form: [
-        {
-          id: "1",
-          lable: "题库管理",
-          chilidren: [
-            {
-              id: "11",
-              lable: "题库管理",
-              path: "manage",
-            },
-            {
-              id: "12",
-              lable: "html题库",
-            },
-            {
-              id: "13",
-              lable: "js题库",
-              path: "about",
-            },
-            {
-              id: "14",
-              lable: "css题库",
-            },
-          ],
-        },
-        {
-          id: "2",
-          lable: "登录账号",
-          path: "login",
-        },
-        {
-          id: "3",
-          lable: "注册账号",
-          path: "register",
-        },
-        {
-          id: "4",
-          lable: "题库类型",
-        },
-        {
-          id: "5",
-          lable: "个人信息",
-          chilidren: [
-            {
-              id: "51",
-              lable: "账号绑定",
-              path: "personinfo",
-            },
-            {
-              id: "52",
-              lable: "我的任务",
-              path: "chat",
-            },
-            {
-              id: "53",
-              lable: "任务列表",
-              path: "jurisdiction",
-            },
-            {
-              id: "54",
-              lable: "用户列表",
-              path: "userlist",
-            },
-            {
-              id: "55",
-              lable: "权限管理",
-              path: "management",
-            },
-          ],
-        },
-      ],
+      menu,
     };
+  },
+  async created() {
+    this.defaultActive = this.$route.name;
+    let res = await getUserInfoApi();
+    this.phone = res.data.data.phone;
+    console.log(res.data.status);
+    if (res.data.status == 401) {
+      this.$router.push({
+        name: "login",
+      });
+    }
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -204,16 +113,6 @@ export default {
         });
       }
     },
-  },
-  async created() {
-    let res = await getUserInfoApi();
-    this.phone = res.data.data[0].phone;
-    console.log(res.data.status);
-    if (res.data.status == 401) {
-      this.$router.push({
-        name: "login",
-      });
-    }
   },
 };
 </script>
