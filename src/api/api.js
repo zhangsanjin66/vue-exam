@@ -2,19 +2,47 @@ import axios from 'axios'
 //api.js 是参访服务端接口的
 
 
+// 添加请求拦截器
+axios.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+
+    //请求拦截器会在请求接口是都会走这个方法
+    //我们可以在请求这个方法到服务端的时候，把这个用户的token值给放到请求头中，
+    //请求拦截器是在请求服务之前进入这个方法 
+    config.headers.authorization=sessionStorage.getItem('token')
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
+
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+    // 对响应数据做点什么
+    //响应拦截器使用来做接口的数据拦截的。
+    //响应拦截器 是在返回数据之后(.then  方法之前)，才会进去响应拦截器
+    if (response.data.status == 401) {
+        this.$router.push({
+          name: "login",
+        });
+      }
+    return response;
+  }, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
 /**
  * @description  获取配置
  ***/
 const baseURL ='/api';
-const getPostConfig = function(){
-   return {
-       baseURL:'/api',
-        headers: {
-        contentType:'application/json',
-        authorization: sessionStorage.getItem("token"),
-        },
+const postConfig={
+    baseURL,
+     headers: {
+     contentType:'application/json',
+     },
 }
-}
+
 
 /**
  * @description  登录接口
@@ -25,7 +53,7 @@ const getPostConfig = function(){
  * @param payload.captcha    验证码
  * **/
 export function getUserLoginApi(payload={}){
-  return  axios.post("/user/login",payload,getPostConfig())
+  return  axios.post("/user/login",payload,postConfig)
 }
 
 
@@ -39,7 +67,7 @@ export function getUserLoginApi(payload={}){
  *  @param payload.email   验证码
  * **/
 export function getUserRegisterApi(payload={}){
-    return  axios.post("/user/register",payload,getPostConfig())
+    return  axios.post("/user/register",payload,postConfig)
 }
 
 
@@ -47,7 +75,7 @@ export function getUserRegisterApi(payload={}){
  * @description  获取用户信息
  ***/
 export function getUserInfoApi(payload={}){
-    return  axios.post("/user/info",payload,getPostConfig())
+    return  axios.post("/user/info",payload,postConfig)
 }
 
 
@@ -67,7 +95,7 @@ export function getUserInfoApi(payload={}){
       @param payload.desc:   <string>,    //个人介绍
  ***/
 export function updateUserInfoApi(payload={}){
-    return  axios.post("/user/update",payload,getPostConfig())
+    return  axios.post("/user/update",payload,postConfig)
 }
 
 
@@ -76,7 +104,7 @@ export function updateUserInfoApi(payload={}){
  * @description  退出登录的接口
  ***/
 export function getUserLogoutApi(payload={}){
-    return  axios.post("/user/logout",payload,getPostConfig())
+    return  axios.post("/user/logout",payload,postConfig)
 }
 
 
@@ -100,7 +128,7 @@ export function getCaptchaApi(){
  ***/
 
 export function queryQuestionBankApi(payload={}){
-    return  axios.post("/question/list",payload,getPostConfig())
+    return  axios.post("/question/list",payload,postConfig)
 }
 
 /**
@@ -117,7 +145,7 @@ export function queryQuestionBankApi(payload={}){
  ***/
 
 export function createQuestionBankApi(payload={}){
-    return  axios.post("/question/create",payload,getPostConfig())
+    return  axios.post("/question/create",payload,postConfig)
 }
 
 
@@ -134,7 +162,7 @@ export function createQuestionBankApi(payload={}){
  ***/
 
 export function updateQuestionBankApi(payload={}){
-    return  axios.post("/question/update",payload,getPostConfig())
+    return  axios.post("/question/update",payload,postConfig)
 }
 
 
@@ -148,7 +176,7 @@ export function updateQuestionBankApi(payload={}){
  ***/
 
 export function deleteQuestionBankApi(payload={}){
-    return  axios.post("/question/delete",payload,getPostConfig())
+    return  axios.post("/question/delete",payload,postConfig)
 }
 
 
@@ -163,7 +191,7 @@ export function deleteQuestionBankApi(payload={}){
  ***/
 
 export function queryDiaryListApi(payload={}){
-    return  axios.post("/diary/list",payload,getPostConfig())
+    return  axios.post("/diary/list",payload,postConfig)
 }
 
 
@@ -177,7 +205,7 @@ export function queryDiaryListApi(payload={}){
  ***/
 
 export function addDiaryCreateApi(payload={}){
-    return  axios.post("/diary/create",payload,getPostConfig())
+    return  axios.post("/diary/create",payload,postConfig)
 }
 
 
@@ -192,7 +220,7 @@ export function addDiaryCreateApi(payload={}){
  ***/
 
 export function createdTaskApi(payload={}){
-    return  axios.post("/task/create",payload,getPostConfig())
+    return  axios.post("/task/create",payload,postConfig)
 }
 
 
@@ -206,7 +234,7 @@ export function createdTaskApi(payload={}){
  ***/
 
 export function releaseTaskApi(payload={}){
-    return  axios.post("/task/release",payload,getPostConfig())
+    return  axios.post("/task/release",payload,postConfig)
 }
 
 
@@ -220,7 +248,7 @@ export function releaseTaskApi(payload={}){
  ***/
 
 export function queryTaskListApi(payload={}){
-    return  axios.post("/task/list",payload,getPostConfig())
+    return  axios.post("/task/list",payload,postConfig)
 }
 
 
@@ -234,7 +262,7 @@ export function queryTaskListApi(payload={}){
  ***/
 
 export function queryUserListApi(payload={}){
-    return  axios.post("/user/list",payload,getPostConfig())
+    return  axios.post("/user/list",payload,postConfig)
 }
 
 
@@ -247,7 +275,7 @@ export function queryUserListApi(payload={}){
  ***/
 
 export function createdRoleApi(payload={}){
-    return  axios.post("/role/create",payload,getPostConfig())
+    return  axios.post("/role/create",payload,postConfig)
 }
 
 
@@ -262,7 +290,7 @@ export function createdRoleApi(payload={}){
  ***/
 
 export function queryRoleListApi(payload={}){
-    return  axios.post("/role/list",payload,getPostConfig())
+    return  axios.post("/role/list",payload,postConfig)
 }
 
 
@@ -274,7 +302,7 @@ export function queryRoleListApi(payload={}){
  ***/
 
 export function createdRolegroupApi(payload={}){
-    return  axios.post("/roleGroup/create",payload,getPostConfig())
+    return  axios.post("/roleGroup/create",payload,postConfig)
 }
 
 
@@ -289,7 +317,7 @@ export function createdRolegroupApi(payload={}){
  ***/
 
 export function queryRolegroupListApi(payload={}){
-    return  axios.post("/roleGroup/list",payload,getPostConfig())
+    return  axios.post("/roleGroup/list",payload,postConfig)
 }
 
 
@@ -301,5 +329,33 @@ export function queryRolegroupListApi(payload={}){
  ***/
 
 export function queryTaskDetailApi(payload={}){
-    return  axios.post("/task/detail",payload,getPostConfig())
+    return  axios.post("/task/detail",payload,postConfig)
+}
+
+
+
+/**
+ * @description  创建评论 
+ * @param  payload <object>
+ *   @param  payload.commentContent:<string>, //要评论的内容
+ *   @param  payload.taskId:<number> //要评论任务的id
+ *   @param  payload.userId:<number> //评论的用户id  是谁评论的
+ ***/
+
+export function createCommentApi(payload={}){
+    return  axios.post("/comment/create",payload,postConfig)
+}
+
+
+
+/**
+ * @description  获取评论列表 
+ * @param  payload <object>
+ *   @param  payload.pagination : <boolean>,    //非必填  表示是否需要分页  如果传 false：不分页   true:分页   默认不传是分页;
+  *  @param  payload.pageSize   : <number>,     //非必填  每页获取几条数据  如果不传 默认是获取10条；
+  *  @param  payload.pageNum    : <number>,     //非必填  想获取第几页的数据  如果不传 默认是第1页；
+ ***/
+
+export function queryCommentListApi(payload={}){
+    return  axios.post("/comment/list",payload,postConfig)
 }

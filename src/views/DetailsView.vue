@@ -44,43 +44,50 @@
       <div class="journal">
         <el-descriptions direction="vertical" :column="1" border size="small">
           <el-descriptions-item label="活动日志">
-            <el-timeline
-              class="timer"
-              v-for="(activity, index) in activities"
-              :key="index"
-            >
-              <el-timeline-item>
-                {{ activity.userName }} 创建了 {{ activity.taskName }}
-                <span class="time">
-                  {{ new Date(activity.createdAt).toLocaleString() }}
-                </span>
-              </el-timeline-item>
-              <el-timeline-item>
-                {{ activity.userName }}重新分配给了
-                <span
-                  v-for="(item, index) in activity.receivedData"
-                  :key="index"
-                  >{{ item.userName }},</span
-                >
-              </el-timeline-item>
-              <el-timeline-item>
-                <span
-                  v-for="(item, index) in activity.receivedData"
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+              <el-tab-pane label="全部" name="first">
+                <el-timeline
+                  class="timer"
+                  v-for="(activity, index) in activities"
                   :key="index"
                 >
-                  {{ item.userName }}
-                  <template v-if="item.completedAt == null">
-                    更新了处理状态 未开始
-                  </template>
-                  <template v-else> 更新了处理状态 已完成 </template>
-                </span>
-              </el-timeline-item>
-            </el-timeline>
+                  <el-timeline-item>
+                    {{ activity.userName }} 创建了 {{ activity.taskName }}
+                    <span class="time">
+                      {{ new Date(activity.createdAt).toLocaleString() }}
+                    </span>
+                  </el-timeline-item>
+                  <el-timeline-item>
+                    {{ activity.userName }}重新分配给了
+                    <span
+                      v-for="(item, index) in activity.receivedData"
+                      :key="index"
+                      >{{ item.userName }},</span
+                    >
+                  </el-timeline-item>
+                  <el-timeline-item>
+                    <span
+                      v-for="(item, index) in activity.receivedData"
+                      :key="index"
+                    >
+                      {{ item.userName }}
+                      <template v-if="item.completedAt == null">
+                        更新了处理状态 未开始
+                      </template>
+                      <template v-else> 更新了处理状态 已完成 </template>
+                    </span>
+                  </el-timeline-item>
+                </el-timeline>
+              </el-tab-pane>
+              <el-tab-pane label="只看日志" name="second">配置管理</el-tab-pane>
+              <el-tab-pane label="只看评论" name="third">角色管理</el-tab-pane>
+            </el-tabs>
           </el-descriptions-item>
         </el-descriptions>
       </div>
       <div class="quill-wrap">
         <quill-editor ref="myQuillEditor" v-model="content" />
+        <el-button @click="publish">发表评论</el-button>
       </div>
     </div>
     <div class="aside">
@@ -145,7 +152,12 @@
 </template>
 
 <script>
-import { queryTaskDetailApi } from "@/api/api";
+import {
+  queryTaskDetailApi,
+  createCommentApi,
+  queryCommentListApi,
+  getUserInfoApi,
+} from "@/api/api";
 import "quill/dist/quill.snow.css";
 import { quillEditor } from "vue-quill-editor";
 export default {
@@ -165,15 +177,43 @@ export default {
         receivedData: [],
       },
       activities: [],
+      activeName: "first",
+      userId: "",
     };
   },
-  async created() {
-    let res = await queryTaskDetailApi({
-      taskId: this.$route.query.taskId,
-    });
-    this.form = res.data.data;
-    this.activities.push(res.data.data);
-    console.log(res.data.data);
+  created() {
+    this.getMenuList()
+  },
+  methods: {
+    async getMenuList() {
+      let [userInfoData, commentListData, taskDetailData] = await Promise.all([
+        getUserInfoApi({}),
+        queryCommentListApi({}),
+        queryTaskDetailApi({
+          taskId: this.$route.query.taskId,
+        }),
+      ]);
+      this.userId=userInfoData.data.data.id
+      this.commentListData=commentListData.data.data
+      this.form=taskDetailData.data.data
+      this.activities.push(taskDetailData.data.data)
+    },
+    publish() {
+      console.log(this.activities[0]);
+      createCommentApi({
+        commentContent: this.content,
+        taskId: Number(this.$route.query.taskId),
+        userId: this.userId,
+      }).then((res) => {
+        console.log(res);
+        if (res.data.status == 1) {
+          this.content = "";
+        }
+      });
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
   },
 };
 </script>

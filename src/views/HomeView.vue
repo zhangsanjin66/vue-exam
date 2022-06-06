@@ -84,11 +84,6 @@ export default {
     let res = await getUserInfoApi();
     this.phone = res.data.data.phone;
     console.log(res.data.status);
-    if (res.data.status == 401) {
-      this.$router.push({
-        name: "login",
-      });
-    }
   },
   methods: {
     handleOpen(key, keyPath) {

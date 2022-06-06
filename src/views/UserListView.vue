@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column prop="phone" label="phone" width="155" align="center">
         </el-table-column>
-        <el-table-column label="createdAt" width="155" align="center">
+        <el-table-column label="createdAt" width="160" align="center">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{
               new Date(scope.row.createdAt).toLocaleString()
