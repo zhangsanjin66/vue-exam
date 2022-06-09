@@ -76,7 +76,10 @@
         <el-table-column width="100" align="center" label="状态">
           <template slot-scope="scope">
             <div slot="reference" class="name-wrapper">
-              <span v-if="scope.row.level == 1" class="level-red" size="medium"
+              <span
+                v-if="scope.row.level == true"
+                class="level-red"
+                size="medium"
                 >紧急</span
               >
               <span v-else class="level-green" size="medium">普通</span>
@@ -155,10 +158,30 @@
                 @click="receiveTask(scope.row)"
                 >领取任务</el-link
               >
+              <el-link
+                type="primary"
+                :underline="false"
+                @click="queryTask(scope.row)"
+                >编辑任务</el-link
+              >
             </div>
           </template>
         </el-table-column>
       </el-table>
+      <el-dialog
+        :visible.sync="dialogVisibleTask"
+        width="40%"
+        :before-close="handleClose"
+      >
+        <title-component>编辑任务</title-component>
+        <!-- <task-form @submit="createTasks" ref="forms" :options="op"></task-form> -->
+        <task-form
+          @submit="createTasks"
+          ref="forms"
+          :taskId="taskId"
+          :pop="pop"
+        ></task-form>
+      </el-dialog>
       <el-dialog
         title="提示"
         :visible.sync="dialogVisible"
@@ -202,11 +225,17 @@ import {
   queryUserListApi,
   releaseTaskApi,
   queryTaskDetailApi,
+  updateTaskApi,
 } from "@/api/api";
+import TaskForm from "@/components/TaskForm.vue";
+// import TaskComponent from "@/components/TaskComponent.vue";
+import TitleComponent from "@/components/TitleComponent.vue";
 export default {
+  components: { TitleComponent, TaskForm },
   data() {
     return {
       dialogVisible: false,
+      dialogVisibleTask: false,
       search: "",
       value2: "",
       optionSelect: [],
@@ -217,7 +246,7 @@ export default {
           taskName: "",
           userName: "",
           desc: "",
-          level: "",
+          level: false,
           isReceived: null,
           duration: "",
         },
@@ -227,17 +256,17 @@ export default {
       pageNum: 1,
       pageCount: "",
       count: 0,
-      checked: false,
       options: [],
-      userId: [],
+      userIds: [],
       obj: [],
-      value: "",
+      value: [],
+      op: [],
+      pop: [],
     };
   },
   async created() {
     let res = await queryUserListApi({ pagination: false });
     this.options = res.data.data.data.rows;
-    console.log(this.options);
     this.queryTaskList();
   },
   methods: {
@@ -280,7 +309,7 @@ export default {
       this.$router.push({
         name: "details",
         query: {
-          taskId: item.id,  
+          taskId: item.id,
         },
       });
     },
@@ -293,7 +322,7 @@ export default {
       })
         .then(() => {
           releaseTaskApi({
-            userId: [63],
+            userIds: [63],
             taskId: item.id,
           }).then((res) => {
             if (res.data.status == 1) {
@@ -311,15 +340,14 @@ export default {
         });
     },
     async publishTask(item) {
-      this.userId = [];
+      this.value = [];
+      this.userIds = [];
       this.taskId = item.id;
       this.dialogVisible = true;
       var arr = [];
       let res = await queryTaskDetailApi({
         taskId: item.id,
       });
-      console.log(res);
-      console.log(this.options);
       this.options.forEach((items) => {
         if (!res.data.data.receivedData.find((i) => i.userId == items.id)) {
           arr.push(items);
@@ -328,13 +356,43 @@ export default {
       });
     },
     async define() {
+      //点击确定
       let res = await releaseTaskApi({
-        userId: this.userId,
+        userIds: this.value,
         taskId: this.taskId,
       });
       if (res.data.status == 1) {
         this.queryTaskList();
         this.dialogVisible = false;
+      }
+    },
+    queryTask(item) {
+      this.taskId = item.id;
+      //点击编辑任务
+      console.log(this.taskId);
+      this.dialogVisibleTask = true;
+      this.pop = item;
+    },
+    async createTasks(ruleForm, userIds) {
+      this.pop = ruleForm;
+      let res = await updateTaskApi({
+        id: this.pop.id,
+        name: this.pop.name,
+        desc: this.pop.desc,
+        duration: this.pop.duration,
+        level: (this.pop.level = this.pop.level == true ? 1 : 0),
+      });
+      console.log(res);
+      if (res.data.status == 1) {
+        releaseTaskApi({
+          userIds: userIds,
+          taskId: this.pop.id,
+        }).then((res) => {
+          console.log(res);
+        });
+          this.queryTaskList();
+        this.dialogVisibleTask = false;
+        this.$refs.forms.initForm();
       }
     },
   },
@@ -353,8 +411,6 @@ export default {
     }
   }
   & .icon-right {
-    // border: 1px solid #ccc;
-    // border-radius: 20px;
     & .logo-icon {
       padding: 0 8px;
     }

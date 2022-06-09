@@ -6,7 +6,7 @@
     <div class="container">
       <div class="navigation">
         <div class="title flex">
-          <div @click="newuser">
+          <div @click="$navigator('usermanagement')">
             <span class="el-icon-user"></span><span>新增角色</span>
           </div>
           <div>
@@ -224,14 +224,12 @@ export default {
   },
   async created() {
     let res = await queryRoleListApi({ pagination: false });
-    console.log(res);
     this.options = res.data.data.rows;
     this.getMenuList();
   },
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(1);
     },
     async getMenuList() {
       let [roleData, groupData] = await Promise.all([
@@ -242,9 +240,7 @@ export default {
       this.groupList = groupData.data.data.rows;
       this.groupList.forEach((item) => {
         item.children = this.roleList.filter((e) => e.groupId == item.id);
-        console.log(item.children);
         item.children.forEach((el) => {
-          console.log(el);
           el.label = el.roleName;
         });
         item.label = item.groupName;
@@ -261,11 +257,6 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event);
-    },
-    newuser() {
-      this.$router.push({
-        name: "usermanagement",
-      });
     },
   },
 };

@@ -81,6 +81,27 @@ const routes = [
       // this generates a separate chunk (details.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "details" */ '../views/DetailsView.vue')
+    },{
+      path: '/cssmanage',
+      name: 'cssmanage',
+      // route level code-splitting
+      // this generates a separate chunk (cssmanage.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "cssmanage" */ '../views/CssManageView.vue')
+    },{
+      path: '/htmlmanage',
+      name: 'htmlmanage',
+      // route level code-splitting
+      // this generates a separate chunk (htmlmanage.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "htmlmanage" */ '../views/HtmlManageView.vue')
+    },{
+      path: '/competition',
+      name: 'competition',
+      // route level code-splitting
+      // this generates a separate chunk (competition.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "competition" */ '../views/CompetitionView.vue')
     },]
   },
   {

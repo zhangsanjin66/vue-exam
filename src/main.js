@@ -6,9 +6,10 @@ import ElementUI from 'element-ui'
 import './styles.scss'
 import './common.scss'
 import VueSocketIO from 'vue-socket.io'
+import navigator from '@/assets/utils/navigator'
 
 Vue.use(ElementUI)
-
+Vue.use(navigator)
 Vue.config.productionTip = false
 
 new Vue({

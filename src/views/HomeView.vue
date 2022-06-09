@@ -31,7 +31,7 @@
             v-for="item in menu"
             :key="item.id"
           >
-            <el-menu-item v-if="!item.children" @click="navigator(item.path)">
+            <el-menu-item v-if="!item.children" @click="$navigator(item.path)">
               <div>
                 <i :class="item.meta.icon"></i>
                 <span>{{ item.lable }}</span>
@@ -50,7 +50,7 @@
               >
                 <el-menu-item
                   :index="child.id"
-                  @click="navigator(child.path)"
+                  @click="$navigator(child.path)"
                   >{{ child.lable }}</el-menu-item
                 >
               </el-menu-item-group>
@@ -92,12 +92,7 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    navigator(name) {
-      if (this.$route.name == name) return;
-      this.$router.push({
-        name: name,
-      });
-    },
+
     async signOut() {
       let res = await getUserLogoutApi();
       console.log(res);

@@ -23,9 +23,7 @@ axios.interceptors.response.use(function (response) {
     //响应拦截器使用来做接口的数据拦截的。
     //响应拦截器 是在返回数据之后(.then  方法之前)，才会进去响应拦截器
     if (response.data.status == 401) {
-        this.$router.push({
-          name: "login",
-        });
+     window.location.href = '/'
       }
     return response;
   }, function (error) {
@@ -221,6 +219,22 @@ export function addDiaryCreateApi(payload={}){
 
 export function createdTaskApi(payload={}){
     return  axios.post("/task/create",payload,postConfig)
+}
+
+
+/**
+ * @description  编辑任务
+ * @param  payload <object>
+ *   @param  payload.id  :<number>, //任务id
+  *  @param  payload.name:<string>, //任务名称
+*  @param  payload.desc:<string>, //任务描述
+  *  @param  payload.duration: <number>,  //任务时长
+  *  @param  payload.level:<number>,  // 任务等级  1：紧急  0：普通任务
+ * 
+ ***/
+
+export function updateTaskApi(payload={}){
+    return  axios.post("/task/update",payload,postConfig)
 }
 
 

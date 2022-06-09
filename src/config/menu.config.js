@@ -11,21 +11,26 @@ export default [
           lable: "题库管理",
           path: "manage",
         },
-        // {
-        //   id: "12",
-        //   lable: "html题库",
-        //   path:'',
-        // },
+        {
+          id: "12",
+          lable: "html题库",
+          path:'htmlmanage',
+        },
         {
           id: "13",
           lable: "js题库",
           path: "about",
         },
-        // {
-        //   id: "14",
-        //   lable: "css题库",
-        //   path:'',
-        // },
+        {
+          id: "14",
+          lable: "css题库",
+          path:'cssmanage',
+        },
+        {
+          id: "15",
+          lable: "比赛系统",
+          path:'competition',
+        },
       ],
     },
     {

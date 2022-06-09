@@ -5,117 +5,68 @@
       <div><el-checkbox>全选</el-checkbox></div>
     </div>
     <div class="content">
-      <div class="item flex">
-        <div class="message"><el-checkbox>消息</el-checkbox></div>
-        <div class="quanxian">
-          <div>
-            <div>
-              <el-checkbox class="pd-10">消息应用设置</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">管理公开群组</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">群组中删除消息</el-checkbox>
-            </div>
-          </div>
-          <div>
-            <div>
-              <el-checkbox class="pd-10">创建公开群组</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">群组企业公告中发送消息</el-checkbox>
-            </div>
-          </div>
-          <div>
-            <div>
-              <el-checkbox class="pd-10">创建私有群组</el-checkbox>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item flex">
-        <div class="message"><el-checkbox>项目</el-checkbox></div>
-        <div class="quanxian flex">
-          <div>
-            <div>
-              <el-checkbox class="pd-10">新建公开项目</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">管理公开项目</el-checkbox>
-            </div>
-          </div>
-          <div>
-            <div>
-              <el-checkbox class="pd-10">新建私有项目</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">新建项目集</el-checkbox>
-            </div>
-          </div>
-          <div>
-            <div>
-              <el-checkbox class="pd-10">创建非项目任务</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">配置中心</el-checkbox>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item flex">
-        <div class="message"><el-checkbox>日历</el-checkbox></div>
-        <div class="quanxian flex">
-          <div>
-            <div>
-              <el-checkbox class="pd-10">日历应用设置</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">管理公开日历</el-checkbox>
-            </div>
-          </div>
-          <div>
-            <div>
-              <el-checkbox class="pd-10">新建公开日历</el-checkbox>
-            </div>
-          </div>
-          <div>
-            <div>
-              <el-checkbox class="pd-10">新建私有日历</el-checkbox>
-            </div>
-          </div>
-          <div class=""></div>
-        </div>
-      </div>
-      <div class="item flex">
-        <div class="message"><el-checkbox>网盘</el-checkbox></div>
-        <div class="quanxian flex">
-          <div class="">
-            <div>
-              <el-checkbox class="pd-10">网盘应用设置</el-checkbox>
-            </div>
-            <div>
-              <el-checkbox class="pd-10">管理公开文件夹</el-checkbox>
-            </div>
-          </div>
-          <div class="">
-            <div>
-              <el-checkbox class="pd-10"
-                >网盘根目录添加文件和文件夹</el-checkbox
-              >
-            </div>
-            <div>
-              <el-checkbox class="pd-10">网盘标签管理</el-checkbox>
-            </div>
-          </div>
-        </div>
+      <div
+        class="item"
+        v-for="city in menuall"
+        :label="city.lable"
+        :key="city.id"
+      >
+        <el-checkbox
+          :indeterminate="isIndeterminate"
+          v-model="checkAll"
+          @change="handleCheckAllChange"
+          >{{ city.lable }}</el-checkbox
+        >
+        <div style="margin: 15px 0"></div>
+        <template v-if="city.children">
+          <el-checkbox-group
+            v-model="checkedCities"
+            @change="handleCheckedCitiesChange"
+          >
+            <el-checkbox
+              v-for="item in city.children"
+              :key="item.id"
+              :label="item.lable"
+            >
+              {{ item.lable }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import menu from "@/config/menu.config";
+export default {
+  data() {
+    return {
+      checkAll: false,
+      checkedCities: [],
+      isIndeterminate: true,
+      menuall: [],
+    };
+  },
+  created() {
+    this.menuall = menu.map((item) => {
+      return item;
+    });
+  },
+  methods: {
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? menu : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.menuall[0].children.length;
+      console.log(this.checkAll);
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.menuall[0].children.length;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
