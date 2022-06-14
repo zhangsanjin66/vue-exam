@@ -137,9 +137,6 @@
                   </el-pagination>
                 </div>
               </div>
-              <!-- <span v-for="(item, index) in options" :key="index">
-                {{ item.roleName }}
-              </span> -->
             </el-tab-pane>
             <el-tab-pane label="功能权限" name="second">
               <managements-view></managements-view>
@@ -154,7 +151,6 @@
 
 <script>
 import ManagementsView from "@/components/ManagementsView.vue";
-// import Group from "@/assets/data/group";
 import { queryRoleListApi, queryRolegroupListApi } from "@/api/api";
 export default {
   components: {
@@ -162,7 +158,7 @@ export default {
   },
   data() {
     return {
-      activeName: "first",
+      activeName: "second",
       data: [],
       options: [],
       optionsName: [],

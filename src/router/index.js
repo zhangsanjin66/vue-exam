@@ -102,6 +102,14 @@ const routes = [
       // this generates a separate chunk (competition.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "competition" */ '../views/CompetitionView.vue')
+    },
+    {
+      path: '/permissionmanagement',
+      name: 'permissionmanagement',
+      // route level code-splitting
+      // this generates a separate chunk (permissionmanagement.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "permissionmanagement" */ '../views/PermissionManagementView.vue')
     },]
   },
   {

@@ -5,6 +5,7 @@ export default [
       meta:{
           icon:'el-icon-setting'
       },
+      checked:false,
       children: [
         {
           id: "11",
@@ -35,32 +36,43 @@ export default [
     },
     {
       id: "2",
-      lable: "登录账号",
-      path: "login",
+      lable: "权限管理",
       meta:{
         icon:'el-icon-user'
     },
+      checked:false,
+      children:[{
+         id: "21",
+         lable: "权限管理",
+         path: "management",
+    },          {
+         id: "22",
+         lable: "权限配置",
+         path: "permissionmanagement",
+    }
+  ]
     },
     {
-      id: "3",
-      lable: "注册账号",
-      path: "register",
-      meta:{
-        icon:'el-icon-document'
+         id: "3",
+         lable: "账号设置",
+         meta:{
+           icon:'el-icon-document'
     },
+         checked:false,
+         children:[      {
+          id: "31",
+          lable: "账号绑定",
+          path: "personinfo",
+        }]
     },
     {
       id: "5",
-      lable: "个人信息",
+      lable: "任务中心",
       meta:{
         icon:'el-icon-eleme'
     },
+    checked:false,
       children: [
-        {
-          id: "51",
-          lable: "账号绑定",
-          path: "personinfo",
-        },
         {
           id: "52",
           lable: "我的任务",
@@ -76,11 +88,7 @@ export default [
           lable: "用户列表",
           path: "userlist",
         },
-        {
-          id: "55",
-          lable: "权限管理",
-          path: "management",
-        },
+
       ],
     },
   ];

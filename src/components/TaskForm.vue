@@ -74,19 +74,20 @@ export default {
     },
   },
   created() {
-    console.log(this.taskId);
-    console.log(this.pop);
-    if (this.taskId) {
-      (this.form.name = this.pop.taskName),
-        (this.form.desc = this.pop.desc),
-        (this.form.duration = this.pop.duration),
-        (this.form.level = this.pop.level == true ? 1 : 0),
-        this.getUserListByTask(this.taskId);
-    } else {
-      this.getUserList();
-    }
+    this.taskds();
   },
   methods: {
+    taskds() {
+      if (this.taskId) {
+        (this.form.name = this.pop.taskName),
+          (this.form.desc = this.pop.desc),
+          (this.form.duration = this.pop.duration),
+          (this.form.level = this.pop.level == true ? 1 : 0),
+          this.getUserListByTask(this.taskId);
+      } else {
+        this.getUserList();
+      }
+    },
     initForm() {
       if (this.taskId) {
         this.form.userIds = [];
@@ -99,6 +100,7 @@ export default {
           duration: 1,
         };
       }
+      this.taskds();
     },
     async getUserList() {
       let usersResult = await queryUserListApi({ pagination: false });
@@ -123,6 +125,7 @@ export default {
           : 0;
         return item;
       });
+
       const { taskName, level, desc, duration } = taskDetail;
       this.form = {
         name: taskName,

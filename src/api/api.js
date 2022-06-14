@@ -79,7 +79,7 @@ export function getUserInfoApi(payload={}){
 
 
 /**
- * @description  获取用户信息
+ * @description  修改用户信息
  * @param payload   <object>
  *   @param payload.phone : <string>,    //手机号 
      @param payload.email : <string>,    //邮箱 
@@ -372,4 +372,58 @@ export function createCommentApi(payload={}){
 
 export function queryCommentListApi(payload={}){
     return  axios.post("/comment/list",payload,postConfig)
+}
+
+
+
+
+/**
+ * @description  获取权限列表 
+ * @param  payload <object>
+ *   @param  payload.pagination : <boolean>,    //非必填  表示是否需要分页  如果传 false：不分页   true:分页   默认不传是分页;
+  *  @param  payload.pageSize   : <number>,     //非必填  每页获取几条数据  如果不传 默认是获取10条；
+  *  @param  payload.pageNum    : <number>,     //非必填  想获取第几页的数据  如果不传 默认是第1页；
+ ***/
+
+export function queryPermissionListApi(payload={}){
+    return  axios.post("/permission/list",payload,postConfig)
+}
+
+
+
+/**
+ * @description  创建权限 
+ * @param  payload <object>
+ *   @param  payload.title :<string>, //标题
+  *  @param  payload.type  :<number>  //类型
+  *  @param  payload.pid   :<number>  //pid如果为空就是最大的一级  如果等于某项的id就是它的子级
+ ***/
+
+export function createPermissionApi(payload={}){
+    return  axios.post("/permission/create",payload,postConfig)
+}
+
+
+
+/**
+ * @description  修改权限 
+ * @param  payload <object>
+ *   @param  payload.title :<string>, //标题
+  *  @param  payload.type  :<number>  //类型
+  *  @param  payload.pid   :<number>  //父id
+ ***/
+
+export function updatePermissionApi(payload={}){
+    return  axios.post("/permission/update",payload,postConfig)
+}
+/**
+ * @description  删除权限 
+ * @param  payload <object>
+ *   @param  payload.title :<string>, //标题
+  *  @param  payload.type  :<number>  //类型
+  *  @param  payload.pid   :<number>  //pid如果为空就是最大的一级  如果等于某项的id就是它的子级
+ ***/
+
+export function deletePermissionApi(payload={}){
+    return  axios.post("/permission/delete",payload,postConfig)
 }

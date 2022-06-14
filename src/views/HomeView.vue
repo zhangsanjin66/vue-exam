@@ -77,15 +77,20 @@ export default {
       username: "",
       phone: "",
       menu,
+      userinfo: {},
     };
   },
-  async created() {
+  created() {
     this.defaultActive = this.$route.name;
-    let res = await getUserInfoApi();
-    this.phone = res.data.data.phone;
-    console.log(res.data.status);
+    this.getUserInfo();
   },
   methods: {
+    async getUserInfo() {
+      let res = await getUserInfoApi();
+      this.phone = res.data.data.phone;
+      this.userinfo = res.data.data;
+      this.$bus.setItem("userinfo", this.userinfo);
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },

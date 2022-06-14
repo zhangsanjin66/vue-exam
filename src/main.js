@@ -7,10 +7,13 @@ import './styles.scss'
 import './common.scss'
 import VueSocketIO from 'vue-socket.io'
 import navigator from '@/assets/utils/navigator'
+import Cache from "@/assets/utils/cache";
 
 Vue.use(ElementUI)
 Vue.use(navigator)
+
 Vue.config.productionTip = false
+Vue.prototype.$bus = new Cache()
 
 new Vue({
   router,

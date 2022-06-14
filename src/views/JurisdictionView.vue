@@ -262,6 +262,7 @@ export default {
       value: [],
       op: [],
       pop: [],
+      userinfo: {},
     };
   },
   async created() {
@@ -314,6 +315,8 @@ export default {
       });
     },
     receiveTask(item) {
+      this.userinfo = this.$bus.getItem("userinfo");
+      console.log(this.userinfo);
       console.log(item);
       this.$confirm("确认是否领取该任务", "提示", {
         confirmButtonText: "确定",
@@ -322,7 +325,7 @@ export default {
       })
         .then(() => {
           releaseTaskApi({
-            userIds: [63],
+            userIds: [this.userinfo.id],
             taskId: item.id,
           }).then((res) => {
             if (res.data.status == 1) {
@@ -390,9 +393,10 @@ export default {
         }).then((res) => {
           console.log(res);
         });
-          this.queryTaskList();
+
         this.dialogVisibleTask = false;
         this.$refs.forms.initForm();
+        this.queryTaskList();
       }
     },
   },

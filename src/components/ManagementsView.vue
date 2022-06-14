@@ -7,28 +7,28 @@
     <div class="content">
       <div
         class="item"
-        v-for="city in menuall"
-        :label="city.lable"
-        :key="city.id"
+        v-for="group in menus"
+        :label="group.lable"
+        :key="group.id"
       >
         <el-checkbox
-          :indeterminate="isIndeterminate"
-          v-model="checkAll"
-          @change="handleCheckAllChange"
-          >{{ city.lable }}</el-checkbox
+          :indeterminate="group.isIndeterminate"
+          v-model="group.checked"
+          @change="handleCheckAllChange($event, group)"
+          >{{ group.lable }}</el-checkbox
         >
         <div style="margin: 15px 0"></div>
-        <template v-if="city.children">
+        <template v-if="group.children">
           <el-checkbox-group
-            v-model="checkedCities"
-            @change="handleCheckedCitiesChange"
+            v-model="group.arr"
+            @change="handleCheckedCitiesChange($event, group)"
           >
             <el-checkbox
-              v-for="item in city.children"
+              v-for="item in group.children"
               :key="item.id"
-              :label="item.lable"
+              :label="item"
             >
-              {{ item.lable }}
+              {{ item }}
             </el-checkbox>
           </el-checkbox-group>
         </template>
@@ -42,28 +42,36 @@ import menu from "@/config/menu.config";
 export default {
   data() {
     return {
-      checkAll: false,
       checkedCities: [],
-      isIndeterminate: true,
-      menuall: [],
+      isIndeterminate: false,
+      menus: [],
     };
   },
   created() {
-    this.menuall = menu.map((item) => {
+    this.menus = menu.map((data) => {
+      let item = JSON.parse(JSON.stringify(data));
+      item.isIndeterminate = false;
+      item.children = item.children
+        ? item.children.map((i) => {
+            return i.lable;
+          })
+        : [];
+      item.arr = [];
       return item;
     });
   },
   methods: {
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? menu : [];
+    handleCheckAllChange(val, group) {
+      group.isIndeterminate = false;
+      group.arr = val ? group.children : [];
       this.isIndeterminate = false;
     },
-    handleCheckedCitiesChange(value) {
+    handleCheckedCitiesChange(value, item) {
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.menuall[0].children.length;
-      console.log(this.checkAll);
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.menuall[0].children.length;
+      item.checked = checkedCount === item.children.length;
+      item.isIndeterminate =
+        checkedCount > 0 && checkedCount < item.children.length;
+      console.log(item.isIndeterminate);
     },
   },
 };
