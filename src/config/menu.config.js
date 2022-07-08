@@ -11,26 +11,41 @@ export default [
           id: "11",
           lable: "题库管理",
           path: "manage",
+          meta:{
+            identifys:[1,2]  //1 是老师  2是学生
+        }
         },
         {
           id: "12",
-          lable: "html题库",
+          lable: "创建题库",
           path:'htmlmanage',
+          meta:{
+            identifys:[1]  
+        }
         },
         {
           id: "13",
-          lable: "js题库",
+          lable: "题库列表",
           path: "about",
+          meta:{
+            identifys:[1,2]  
+        }
         },
         {
           id: "14",
-          lable: "css题库",
+          lable: "删除题库",
           path:'cssmanage',
+          meta:{
+            identifys:[1]  
+        }
         },
         {
           id: "15",
-          lable: "比赛系统",
+          lable: "修改题库",
           path:'competition',
+          meta:{
+            identifys:[1]  
+        }
         },
       ],
     },
@@ -45,14 +60,23 @@ export default [
          id: "21",
          lable: "角色管理",
          path: "management",
+         meta:{
+          identifys:[1]  
+      }
     },{
          id: "22",
          lable: "权限配置",
          path: "permissionmanagement",
+         meta:{
+          identifys:[1]  
+      }
     },{
       id: "23",
       lable: "创建角色",
       path: "usermanagement",
+      meta:{
+        identifys:[1]  
+    }
  }
   ]
     },
@@ -67,11 +91,17 @@ export default [
           id: "31",
           lable: "修改用户信息",
           path: "personinfo",
+          meta:{
+            identifys:[1]  
+        }
         },
         {
           id: "32",
           lable: "修改头像",
           path: "setavatar",
+          meta:{
+            identifys:[1]  
+        }
         }]
     },
     {
@@ -86,21 +116,33 @@ export default [
           id: "52",
           lable: "我的任务",
           path: "chat",
+          meta:{
+            identifys:[1]  
+        }
         },
         {
           id: "53",
           lable: "任务列表",
           path: "jurisdiction",
+          meta:{
+            identifys:[1]  
+        }
         },
         {
           id: "54",
           lable: "用户列表",
           path: "userlist",
+          meta:{
+            identifys:[1]  
+        }
         },
         {
           id: "55",
           lable: '创建任务',
           path: "createdtask",
+          meta:{
+            identifys:[1]  
+        }
       },
       ],
     },
@@ -116,6 +158,9 @@ export default [
         id:'61',
         lable: '关于我们',
           path: "other",
+          meta:{
+            identifys:[1]  
+        }
       },
   ],
     }

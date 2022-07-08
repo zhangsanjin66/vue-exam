@@ -8,7 +8,7 @@
         </div>
         <div class="pr-4 align-center font-size_12">
           <div>武汉市 2017-07-20 15:00 星期三 21-22℃ 晴 风力 2级 风向 微风</div>
-      
+
           <img
             class="icon-headportrait"
             :src="$store.state.userInfo.avatarImg"
@@ -45,11 +45,13 @@
                   <span>{{ item.lable }}</span>
                 </div>
               </template>
+
               <el-menu-item-group
                 v-for="child in item.children"
                 :key="child.id"
               >
                 <el-menu-item
+                  v-if="child.meta.identifys.includes(identify)"
                   :index="child.id"
                   @click="$navigator(child.path)"
                   >{{ child.lable }}</el-menu-item
@@ -78,6 +80,7 @@ export default {
       phone: "",
       menu,
       userinfo: {},
+      identify: null,
     };
   },
   computed: {
@@ -90,12 +93,13 @@ export default {
   },
   created() {
     this.getUserInfo();
+    console.log(this.menu);
   },
   methods: {
     async getUserInfo() {
       let res = await getUserInfoApi();
-      console.log(res);
       this.userinfo = res.data.data;
+      this.identify = res.data.data.identify;
       this.$store.commit("userInfo", res.data.data);
       this.phone = res.data.data.phone;
       this.$bus.setItem("userinfo", this.userinfo);

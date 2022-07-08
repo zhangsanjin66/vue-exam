@@ -6,15 +6,15 @@
           <el-tag> <span class="el-icon-s-fold"></span> </el-tag><span>#1</span>
         </div>
         <div class="align-center">
-          <span class="pr-5"><img src="../assets/icon-eye.png" alt="" /></span>
+          <span class="pr-5"><img src="../../assets/icon-eye.png" alt="" /></span>
           <span>一人关注</span>
           <span class="el-icon-caret-bottom"></span>
           <span class="plr-15">|</span>
-          <span><img src="../assets/icon-fangda.png" alt="" /></span>
+          <span><img src="../../assets/icon-fangda.png" alt="" /></span>
           <span class="plr-15"
-            ><img src="../assets/icon-fenxiang.png" alt=""
+            ><img src="../../assets/icon-fenxiang.png" alt=""
           /></span>
-          <span><img src="../assets/icon-shenglue.png" alt="" /></span>
+          <span><img src="../../assets/icon-shenglue.png" alt="" /></span>
         </div>
       </div>
       <h3>任务测试</h3>
@@ -95,7 +95,7 @@
         <div class="pd-5">
           <div class="pt-10 pb-10">项目</div>
           <div>
-            <img src="@/assets/icon-dengpao.png" alt="" />
+            <img src="../../assets/icon-dengpao.png" alt="" />
             {{ this.form.taskName }}
           </div>
         </div>
@@ -125,7 +125,7 @@
         <div class="pd-5">
           <div class="pt-10 pb-10">优先级</div>
           <div>
-            <img src="@/assets/icon-dengpao.png" alt="" />
+            <img src="../../assets/icon-dengpao.png" alt="" />
             中
           </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="header align-center">
-      <img src="../assets/icon-management.png" alt="" /> <span>角色管理</span>
+      <img src="../../assets/icon-management.png" alt="" /> <span>角色管理</span>
     </div>
     <div class="container">
       <div class="navigation">
@@ -61,7 +61,7 @@
                   </div>
                   <div>
                     <el-button class="btn"
-                      ><img src="@/assets/icon-menus.png" alt=""
+                      ><img src="../../assets/icon-menus.png" alt=""
                     /></el-button>
                   </div>
                 </div>

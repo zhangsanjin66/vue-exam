@@ -51,7 +51,7 @@
 
         <div class="assign">
           <div>
-            <img class="icon-modify" src="../assets/icon-modify.png" alt="" />
+            <img class="icon-modify" src="../../assets/icon-modify.png" alt="" />
           </div>
           <div class="nav">
             <div>Emily just sent you task to assign</div>
@@ -74,16 +74,16 @@
           <div class="flex-between">
             <div class="team-chat">Team Chat</div>
             <div class="frequency flex-between">
-              <img class="icon-head" src="../assets/icon_avatar.png" alt="" />
-              <img class="icon-head" src="../assets/icon_avatar.png" alt="" />
-              <img class="icon-head" src="../assets/icon_avatar.png" alt="" />
+              <img class="icon-head" src="../../assets/icon_avatar.png" alt="" />
+              <img class="icon-head" src="../../assets/icon_avatar.png" alt="" />
+              <img class="icon-head" src="../../assets/icon_avatar.png" alt="" />
               <div class="">+17</div>
             </div>
           </div>
           <div class="add-friends flex-between">
             <img
               class="icon-add mr-5"
-              src="../assets/icon-addfriends.png"
+              src="../../assets/icon-addfriends.png"
               alt=""
             />
             <span>Invlte people</span>
