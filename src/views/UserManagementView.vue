@@ -37,7 +37,7 @@
         </el-form>
       </div>
       <div class="check">
-        <managements-view></managements-view>
+        <managements-view @add="cart"></managements-view>
       </div>
       <div>
         <el-button type="primary" round @click="submit">创建成功</el-button>
@@ -48,7 +48,11 @@
 
 <script>
 import ManagementsView from "@/components/ManagementsView.vue";
-import { queryRolegroupListApi, createdRoleApi } from "@/api/api";
+import {
+  getRolegroupListApi,
+  createdRoleApi,
+  createrolepermissionApi,
+} from "@/api/api";
 export default {
   components: { ManagementsView },
   data() {
@@ -58,18 +62,34 @@ export default {
         groupId: "",
       },
       options: [],
+      value: {},
+      titleData: [],
     };
   },
   async created() {
-    let res = await queryRolegroupListApi({ pagination: false });
+    let res = await getRolegroupListApi({ pagination: false });
     console.log(res);
     this.options = res.data.data.rows;
     console.log(this.options);
   },
   methods: {
+    cart(menu) {
+      let res = [];
+      menu.forEach((element) => {
+        res = res.concat(element.arr);
+      });
+      this.titleData = res;
+    },
     async submit() {
-      let res = await createdRoleApi(this.formInline);
-      console.log(res);
+      let Role = await createdRoleApi(this.formInline);
+      if (Role.data.status == 1) {
+        createrolepermissionApi({
+          title: this.titleData,
+          rId: Role.data.data[0].id,
+        }).then((res) => {
+          console.log(res);
+        });
+      }
     },
   },
 };

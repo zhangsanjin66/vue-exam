@@ -139,7 +139,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="功能权限" name="second">
-              <managements-view></managements-view>
+              <managements-view :dataId="dataId"></managements-view>
             </el-tab-pane>
             <el-tab-pane label="数据范围" name="third">数据范围</el-tab-pane>
           </el-tabs>
@@ -151,7 +151,7 @@
 
 <script>
 import ManagementsView from "@/components/ManagementsView.vue";
-import { queryRoleListApi, queryRolegroupListApi } from "@/api/api";
+import { getRoleListApi, getRolegroupListApi } from "@/api/api";
 export default {
   components: {
     ManagementsView,
@@ -216,10 +216,11 @@ export default {
         },
       ],
       multipleSelection: [],
+      dataId: "",
     };
   },
   async created() {
-    let res = await queryRoleListApi({ pagination: false });
+    let res = await getRoleListApi({ pagination: false });
     this.options = res.data.data.rows;
     this.getMenuList();
   },
@@ -229,8 +230,8 @@ export default {
     },
     async getMenuList() {
       let [roleData, groupData] = await Promise.all([
-        queryRoleListApi({ pagination: false }),
-        queryRolegroupListApi({ pagination: false }),
+        getRoleListApi({ pagination: false }),
+        getRolegroupListApi({ pagination: false }),
       ]);
       this.roleList = roleData.data.data.rows;
       this.groupList = groupData.data.data.rows;
@@ -250,6 +251,7 @@ export default {
     },
     handleNodeClick(data) {
       console.log(data);
+      this.dataId = data.id;
     },
     handleClick(tab, event) {
       console.log(tab, event);

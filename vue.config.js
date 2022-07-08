@@ -6,7 +6,7 @@ module.exports = defineConfig({
     // axios.post('http://192.168.1.5:7001/user/login')
     proxy:{
       '/api': {
-        target:'http://192.168.0.120:7001',  //服务端的域名地址
+        target:'http://192.168.0.127:7001',  //服务端的域名地址
         ws:true,
         changeOrigin:true,
         pathRewrite:{'^/api' : ''}

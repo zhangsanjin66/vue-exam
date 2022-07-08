@@ -27,6 +27,7 @@
               v-for="item in group.children"
               :key="item.id"
               :label="item"
+              :disabled="item.disabled"
             >
               {{ item }}
             </el-checkbox>
@@ -39,23 +40,48 @@
 
 <script>
 import menu from "@/config/menu.config";
+import { getRolepermissionListApi, getPermissionListApi } from "@/api/api";
 export default {
+  props: ["data-id"],
   data() {
     return {
       checkedCities: [],
       isIndeterminate: false,
       menus: [],
+      rows: [],
+      RoleData: [],
     };
+  },
+  watch: {
+    dataId() {
+      getPermissionListApi({ pagination: false }).then((item) => {
+        this.rows = item.data.data.rows;
+        console.log(this.rows);
+      });
+      getRolepermissionListApi({}).then((res) => {
+        this.RoleData = res.data.data.rows;
+        console.log(this.RoleData);
+        this.RoleData.forEach((role) => {
+          if ((role.roleId = this.dataId)) {
+            this.rows.filter((i) => {
+            role.title == i.title;
+            }).disabled = true;
+          }
+        });
+      });
+    },
   },
   created() {
     this.menus = menu.map((data) => {
       let item = JSON.parse(JSON.stringify(data));
+      console.log(item);
       item.isIndeterminate = false;
       item.children = item.children
         ? item.children.map((i) => {
             return i.lable;
           })
         : [];
+      item.children.disabled = false;
       item.arr = [];
       return item;
     });
@@ -72,6 +98,7 @@ export default {
       item.isIndeterminate =
         checkedCount > 0 && checkedCount < item.children.length;
       console.log(item.isIndeterminate);
+      this.$emit("add", this.menus);
     },
   },
 };
@@ -89,16 +116,6 @@ export default {
     min-width: 750px;
     padding: 10px;
     border: 1px solid #eef3fc;
-    & .quanxian {
-      display: grid;
-      grid-template-columns: 300px 300px 100px;
-    }
-    & .message {
-      padding: 15px 50px 0 0;
-      border-right: 1px solid #eef3fc;
-      display: flex;
-      align-items: center;
-    }
     & .desc {
       color: #aaaaaa;
       font-size: 14px;

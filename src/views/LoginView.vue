@@ -45,8 +45,8 @@ import { getUserLoginApi, getCaptchaApi } from "@/api/api.js";
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      username: "zhangxin",
+      password: "123456789",
       captcha: "",
       captchaSrc: "/api/captcha",
     };

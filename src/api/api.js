@@ -303,7 +303,7 @@ export function createdRoleApi(payload={}){
  * 
  ***/
 
-export function queryRoleListApi(payload={}){
+export function getRoleListApi(payload={}){
     return  axios.post("/role/list",payload,postConfig)
 }
 
@@ -330,7 +330,7 @@ export function createdRolegroupApi(payload={}){
  * 
  ***/
 
-export function queryRolegroupListApi(payload={}){
+export function getRolegroupListApi(payload={}){
     return  axios.post("/roleGroup/list",payload,postConfig)
 }
 
@@ -385,12 +385,23 @@ export function queryCommentListApi(payload={}){
   *  @param  payload.pageNum    : <number>,     //非必填  想获取第几页的数据  如果不传 默认是第1页；
  ***/
 
-export function queryPermissionListApi(payload={}){
+export function getPermissionListApi(payload={}){
     return  axios.post("/permission/list",payload,postConfig)
 }
 
 
 
+/**
+ * @description  获取功能权限列表 
+ * @param  payload <object>
+ *   @param  payload.pagination : <boolean>,    //非必填  表示是否需要分页  如果传 false：不分页   true:分页   默认不传是分页;
+  *  @param  payload.pageSize   : <number>,     //非必填  每页获取几条数据  如果不传 默认是获取10条；
+  *  @param  payload.pageNum    : <number>,     //非必填  想获取第几页的数据  如果不传 默认是第1页；
+ ***/
+
+export function getRolepermissionListApi(payload={}){
+    return  axios.post("/rolePermission/list",payload,postConfig)
+}
 /**
  * @description  创建权限 
  * @param  payload <object>
@@ -426,4 +437,28 @@ export function updatePermissionApi(payload={}){
 
 export function deletePermissionApi(payload={}){
     return  axios.post("/permission/delete",payload,postConfig)
+}
+
+
+
+/**
+ * @description  创建权限 
+ * @param  payload <object>
+ *   @param  payload.title :<string>, //选择的那个功能权限名称
+  *  @param  payload.rId   :<number>  //角色的id
+ ***/
+
+export function createrolepermissionApi(payload={}){
+    return  axios.post("/rolePermission/create",payload,postConfig)
+}
+
+
+
+/**
+ * @description  返回头像 
+ * @param  payload <object>
+ ***/
+
+export function AvatarListApi(payload={}){
+    return  axios.post("/avatar/list",payload,postConfig)
 }

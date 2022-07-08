@@ -32,6 +32,13 @@ const routes = [
       // this generates a separate chunk (manage.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "manage" */ '../views/ManageView.vue')
+    },  {
+      path: '/setavatar',
+      name: 'setavatar',
+      // route level code-splitting
+      // this generates a separate chunk (manage.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "manage" */ '../views/SetAvatarView.vue')
     },{
       path: '/createdtask',
       name: 'createdtask',
@@ -110,6 +117,14 @@ const routes = [
       // this generates a separate chunk (permissionmanagement.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "permissionmanagement" */ '../views/PermissionManagementView.vue')
+    },
+    {
+      path: '/other',
+      name: 'other',
+      // route level code-splitting
+      // this generates a separate chunk (other.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "other" */ '../views/OtherView.vue')
     },]
   },
   {

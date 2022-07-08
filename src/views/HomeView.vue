@@ -8,9 +8,10 @@
         </div>
         <div class="pr-4 align-center font-size_12">
           <div>武汉市 2017-07-20 15:00 星期三 21-22℃ 晴 风力 2级 风向 微风</div>
+      
           <img
             class="icon-headportrait"
-            src="../assets/icon_avatar.png"
+            :src="$store.state.userInfo.avatarImg"
             alt=""
           />
           <span>{{ phone }}</span>
@@ -73,22 +74,30 @@ import menu from "@/config/menu.config";
 export default {
   data() {
     return {
-      defaultActive: "",
       username: "",
       phone: "",
       menu,
       userinfo: {},
     };
   },
+  computed: {
+    defaultActive() {
+      return this.$route.name;
+    },
+    userInfo() {
+      return this.$store.state.userInfo;
+    },
+  },
   created() {
-    this.defaultActive = this.$route.name;
     this.getUserInfo();
   },
   methods: {
     async getUserInfo() {
       let res = await getUserInfoApi();
-      this.phone = res.data.data.phone;
+      console.log(res);
       this.userinfo = res.data.data;
+      this.$store.commit("userInfo", res.data.data);
+      this.phone = res.data.data.phone;
       this.$bus.setItem("userinfo", this.userinfo);
     },
     handleOpen(key, keyPath) {

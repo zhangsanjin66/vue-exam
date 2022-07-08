@@ -34,11 +34,19 @@
       </span>
     </el-tree>
     <el-dialog title="填加权限" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="权限名称" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules">
+        <el-form-item
+          label="权限名称"
+          :label-width="formLabelWidth"
+          prop="title"
+        >
           <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="权限类型" :label-width="formLabelWidth">
+        <el-form-item
+          label="权限类型"
+          :label-width="formLabelWidth"
+          prop="type"
+        >
           <el-select v-model="form.type" filterable placeholder="请选择">
             <el-option
               v-for="item in types"
@@ -83,7 +91,7 @@
 
 <script>
 import {
-  queryPermissionListApi,
+  getPermissionListApi,
   createPermissionApi,
   deletePermissionApi,
   updatePermissionApi,
@@ -92,11 +100,17 @@ export default {
   data() {
     const data = [];
     return {
+      rules: {
+        title: [{ required: true, message: "请输入任务名称", trigger: "blur" }],
+        type: [
+          { required: true, message: "请选择任务类型", trigger: "change" },
+        ],
+      },
       data: JSON.parse(JSON.stringify(data)),
       form: {
-        id: "",
+        id: null,
         title: "",
-        type: null,
+        type: 1,
         pid: null,
       },
       options: [],
@@ -122,11 +136,11 @@ export default {
     };
   },
   created() {
-    this.queryPermissionList();
+    this.getPermissionList();
   },
   methods: {
-    async queryPermissionList() {
-      let res = await queryPermissionListApi({ pagination: false });
+    async getPermissionList() {
+      let res = await getPermissionListApi({ pagination: false });
       console.log(res);
       let data = res.data.data.rows;
       this.options = res.data.data.rows;
@@ -153,19 +167,21 @@ export default {
       this.dialogFormVisible = true;
       this.updatePermission = true;
       this.form.title = data.title;
-      this.form.type = data.type;
+      this.form.type =
+      data.type == 1 ? "左侧栏" : data.type == 2 ? "页面" : "功能";
       this.form.id = data.id;
       this.form.pid = data.pid;
     },
     async modifypermission() {
+      const { title, type, pid, id } = this.form;
       let res = await updatePermissionApi({
-        title: this.form.title,
-        type: this.form.type,
-        id: this.form.id,
-        pid: this.form.pid,
+        title,
+        type: type == "左侧栏" ? 1 : type == "页面" ? 2 : 3,
+        id,
+        pid,
       });
       if (res.data.status == 1) {
-        this.queryPermissionList();
+        this.getPermissionList();
         this.dialogFormVisible = false;
       }
     },
@@ -192,7 +208,7 @@ export default {
           let childrenId = this.getSelectedIds(data);
           deletePermissionApi({ id: childrenId }).then((res) => {
             console.log(res);
-            this.queryPermissionList();
+            this.getPermissionList();
             this.$message.success("删除成功");
           });
         })
@@ -208,9 +224,11 @@ export default {
     },
     add() {
       this.dialogFormVisible = true;
-      this.determine();
       this.initForm();
+      this.determine();
       this.createPERmission = true;
+      this.updatePermission = false;
+      this.flag = false;
     },
     append(data) {
       this.initForm();
@@ -223,14 +241,11 @@ export default {
     },
     async determine() {
       //修改确定按钮
-      let res = await createPermissionApi({
-        title: this.form.title,
-        type: this.form.type,
-        pid: this.form.pid,
-      });
+      const { title, type, pid } = this.form;
+      let res = await createPermissionApi({ title, type, pid });
       if (res.data.status == 1) {
         this.dialogFormVisible = false;
-        this.queryPermissionList();
+        this.getPermissionList();
       }
     },
   },
