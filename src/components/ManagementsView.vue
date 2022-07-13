@@ -59,12 +59,12 @@ export default {
         console.log(this.rows);
       });
       getRolepermissionListApi({}).then((res) => {
-        this.RoleData = res.data.data.rows;
+        this.RoleData = res.data.data;
         console.log(this.RoleData);
         this.RoleData.forEach((role) => {
           if ((role.roleId = this.dataId)) {
             this.rows.filter((i) => {
-            role.title == i.title;
+              role.title == i.title;
             }).disabled = true;
           }
         });
@@ -91,6 +91,8 @@ export default {
       group.isIndeterminate = false;
       group.arr = val ? group.children : [];
       this.isIndeterminate = false;
+      console.log(val);
+      console.log(group);
     },
     handleCheckedCitiesChange(value, item) {
       let checkedCount = value.length;
@@ -99,6 +101,7 @@ export default {
         checkedCount > 0 && checkedCount < item.children.length;
       console.log(item.isIndeterminate);
       this.$emit("add", this.menus);
+      console.log(value);
     },
   },
 };

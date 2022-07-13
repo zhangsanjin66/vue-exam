@@ -274,7 +274,6 @@ export default {
   },
   watch: {
     questionOptions(newValue) {
-      console.log(newValue);
       this.answer = !newValue.includes(this.answer) ? "" : newValue;
     },
   },
@@ -311,7 +310,6 @@ export default {
         title: this.search,
       });
       if (res.data.status == 1) {
-        console.log(res.data.data);
         this.data = res.data.data.rows;
         this.page = res.data.data.count;
         this.pageCount = res.data.data.pageCount;

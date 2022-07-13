@@ -114,7 +114,7 @@ export default {
         });
         sessionStorage.setItem("token", res.data.data);
         this.$router.push({
-          name: "chat",
+          name: "home",
         });
       } else {
         //登录失败

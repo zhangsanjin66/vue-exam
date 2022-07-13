@@ -250,7 +250,6 @@ export default {
       // console.log(this.data);
     },
     handleNodeClick(data) {
-      console.log(data);
       this.dataId = data.id;
     },
     handleClick(tab, event) {

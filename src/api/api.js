@@ -400,7 +400,7 @@ export function getPermissionListApi(payload={}){
  ***/
 
 export function getRolepermissionListApi(payload={}){
-    return  axios.post("/rolePermission/list",payload,postConfig)
+    return  axios.post("/jurisdiction/list",payload,postConfig)
 }
 /**
  * @description  创建权限 
@@ -442,16 +442,26 @@ export function deletePermissionApi(payload={}){
 
 
 /**
- * @description  创建权限 
+ * @description  配置角色能访问那些页面 
  * @param  payload <object>
  *   @param  payload.title :<string>, //选择的那个功能权限名称
   *  @param  payload.rId   :<number>  //角色的id
  ***/
 
-export function createrolepermissionApi(payload={}){
-    return  axios.post("/rolePermission/create",payload,postConfig)
+export function createjurisdictionApi(payload={}){
+    return  axios.post("/jurisdiction/create",payload,postConfig)
 }
 
+/**
+ * @description  获取功能权限列表 
+ * @param  payload <object>
+ *   @param  payload.title :<string>, //选择的那个功能权限名称
+  *  @param  payload.rId   :<number>  //角色的id
+ ***/
+
+export function getrolepermissionApi(payload={}){
+    return  axios.post("/rolePermission/list",payload,postConfig)
+}
 
 
 /**

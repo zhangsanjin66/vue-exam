@@ -9,12 +9,8 @@
         <div class="pr-4 align-center font-size_12">
           <div>武汉市 2017-07-20 15:00 星期三 21-22℃ 晴 风力 2级 风向 微风</div>
 
-          <img
-            class="icon-headportrait"
-            :src="$store.state.userInfo.avatarImg"
-            alt=""
-          />
-          <span>{{ phone }}</span>
+          <img class="icon-headportrait" :src="userInfo.avatarImg" alt="" />
+          <span>{{ userInfo.phone }}</span>
           <img class="icon-close" src="../assets/icon-close.png" alt="" />
           <span @click="signOut">退出</span>
         </div>
@@ -32,31 +28,26 @@
             v-for="item in menu"
             :key="item.id"
           >
-            <el-menu-item v-if="!item.children" @click="$navigator(item.path)">
-              <div>
-                <i :class="item.meta.icon"></i>
-                <span>{{ item.lable }}</span>
-              </div>
-            </el-menu-item>
-            <el-submenu :index="item.id" v-else>
+            <el-submenu :index="item.id" v-if="item.flag">
               <template slot="title">
                 <div>
                   <i :class="item.meta.icon"></i>
                   <span>{{ item.lable }}</span>
                 </div>
               </template>
-
-              <el-menu-item-group
-                v-for="child in item.children"
-                :key="child.id"
-              >
-                <el-menu-item
-                  v-if="child.meta.identifys.includes(identify)"
-                  :index="child.id"
-                  @click="$navigator(child.path)"
-                  >{{ child.lable }}</el-menu-item
-                >
-              </el-menu-item-group>
+              <div v-for="child in item.children" :key="child.id">
+                <div v-for="item in title" :key="item.id">
+                  <template v-if="child.flag">
+                    <el-menu-item
+                      :index="child.id"
+                      @click="$navigator(child.name)"
+                      v-if="child.lable == item.title"
+                    >
+                      {{ child.lable }}
+                    </el-menu-item>
+                  </template>
+                </div>
+              </div>
             </el-submenu>
           </el-menu>
         </el-aside>
@@ -68,41 +59,73 @@
   </div>
 </template>
 
-
- 
 <script>
-import { getUserLogoutApi, getUserInfoApi } from "@/api/api.js";
+import { getUserLogoutApi } from "@/api/api.js";
 import menu from "@/config/menu.config";
+import { mapState, mapActions } from "vuex";
+import router from "@/router";
 export default {
   data() {
     return {
       username: "",
       phone: "",
       menu,
-      userinfo: {},
-      identify: null,
+      titlelist: [],
     };
   },
   computed: {
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+      title: (state) => state.user.title,
+    }),
     defaultActive() {
       return this.$route.name;
     },
-    userInfo() {
-      return this.$store.state.userInfo;
-    },
   },
-  created() {
-    this.getUserInfo();
-    console.log(this.menu);
+  async created() {
+    await this.getUserInfoApi();
+    this.getRolepermissionList();
   },
   methods: {
-    async getUserInfo() {
-      let res = await getUserInfoApi();
-      this.userinfo = res.data.data;
-      this.identify = res.data.data.identify;
-      this.$store.commit("userInfo", res.data.data);
-      this.phone = res.data.data.phone;
-      this.$bus.setItem("userinfo", this.userinfo);
+    ...mapActions(["getUserInfoApi", "getRolepermissionListApi"]),
+    async getRolepermissionList() {
+      await this.getRolepermissionListApi({
+        role: this.userInfo.identify,
+      });
+      let usertitle = [];
+      this.title.forEach((el) => {
+        usertitle.push(el.title);
+      });
+      this.menu = this.menu.map((e) => {
+        if (usertitle.includes(e.lable)) {
+          e.flag = true;
+        } else {
+          e.flag = false;
+        }
+        e.children.forEach((el) => {
+          if (usertitle.includes(el.lable)) {
+            el.flag = true;
+            e.flag = true;
+          } else {
+            el.flag = false;
+          }
+        });
+        return e;
+      });
+      let userRout = [];
+      this.title.forEach((el) => {
+        this.menu.forEach((item) => {
+          item.children.filter((rout) => {
+            if (rout.lable == el.title) {
+              userRout.push(rout);
+            }
+          });
+        });
+      });
+      this.$store.commit("ROUT", userRout);
+      this.$store.state.user.userRout.forEach((el) => {
+        router.addRoute("home", el);
+      });
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);

@@ -51,7 +51,9 @@ import ManagementsView from "@/components/ManagementsView.vue";
 import {
   getRolegroupListApi,
   createdRoleApi,
-  createrolepermissionApi,
+  createjurisdictionApi,
+  getrolepermissionApi,
+  getRolepermissionListApi,
 } from "@/api/api";
 export default {
   components: { ManagementsView },
@@ -64,13 +66,20 @@ export default {
       options: [],
       value: {},
       titleData: [],
+      permissionId: [],
+      rolepermissionlist: [],
     };
   },
   async created() {
     let res = await getRolegroupListApi({ pagination: false });
-    console.log(res);
     this.options = res.data.data.rows;
-    console.log(this.options);
+    let rolepermission = await getrolepermissionApi({ pagination: false });
+    console.log(rolepermission);
+    let jurisdictionlist = await getRolepermissionListApi({
+      role: this.$store.state.userInfo.identify,
+    });
+    console.log(jurisdictionlist);
+    this.rolepermissionlist = rolepermission.data.data.rows;
   },
   methods: {
     cart(menu) {
@@ -79,16 +88,26 @@ export default {
         res = res.concat(element.arr);
       });
       this.titleData = res;
+
+      this.rolepermissionlist.forEach((el) => {
+        this.titleData.filter((item) => {
+          if (el.title == item) {
+            this.permissionId.push(el.id);
+          }
+        });
+      });
     },
     async submit() {
       let Role = await createdRoleApi(this.formInline);
       if (Role.data.status == 1) {
-        createrolepermissionApi({
-          title: this.titleData,
-          rId: Role.data.data[0].id,
-        }).then((res) => {
-          console.log(res);
+        let res = await createjurisdictionApi({
+          permissionId: [...new Set(this.permissionId)],
+          roleId: Role.data.data[0].id,
         });
+        console.log(res);
+        if (res.data.status == 1) {
+          this.formInline = {};
+        }
       }
     },
   },
